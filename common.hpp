@@ -73,3 +73,39 @@ vector<int> sieve(int n) {
   }
   return res;
 }
+
+/**
+ * ListNode
+ */
+struct ListNode {
+  int val;
+  ListNode *next;
+  ListNode() : val(0), next(nullptr) {}
+  ListNode(int x) : val(x), next(nullptr) {}
+  ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+// vector<int>をListNodeに変換
+ListNode *v_to_ln(const vector<int> &a) {
+  ListNode dummy;
+  ListNode *tail = &dummy;
+  for (int x : a) {
+    tail->next = new ListNode(x);
+    tail = tail->next;
+  }
+  return dummy.next;
+}
+
+// ListNodeを出力
+void print_ln(ListNode *head) {
+  ListNode *cur = head;
+  cout << "(";
+  while (cur != nullptr) {
+
+    cout << cur->val;
+    if (cur->next) {
+      cout << ",";
+    }
+    cur = cur->next;
+  }
+  cout << ")" << endl;
+}
