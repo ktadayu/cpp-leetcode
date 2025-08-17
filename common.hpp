@@ -23,6 +23,7 @@ using std::endl;
 #include <queue>
 using std::greater;
 using std::priority_queue;
+using std::queue;
 #include <deque>
 using std::deque;
 #include <utility>
@@ -30,6 +31,10 @@ using std::pair;
 using std::swap;
 #include <bits/stdc++.h>
 using std::array;
+#include <optional>
+using std::nullopt;
+using std::optional;
+using opi = std::optional<int>;
 
 template <typename T> struct is_pair : std::false_type {};
 
@@ -44,6 +49,8 @@ template <typename T> void print_vector(const vector<T> &v) {
       cout << v[i];
     } else if constexpr (is_pair<T>::value) {
       cout << "(" << v[i].first << "," << v[i].second << ")";
+    } else if constexpr (std::is_same_v<T, bool>) {
+      cout << (v[i] ? "true" : "false");
     } else {
       print_vector(v[i]);
     }
@@ -108,4 +115,104 @@ void print_ln(ListNode *head) {
     cur = cur->next;
   }
   cout << ")" << endl;
+}
+
+/**
+ * Trees
+ *
+ */
+struct TreeNode {
+  int val;
+  TreeNode *left;
+  TreeNode *right;
+  TreeNode() : val(0), left(nullptr), right(nullptr) {}
+  TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+  TreeNode(int x, TreeNode *left, TreeNode *right)
+      : val(x), left(left), right(right) {}
+};
+
+// ----- テスト補助：木を作る（レベル順、null可）-----
+
+TreeNode *buildTree(const vector<optional<int>> &a) {
+  if (a.empty() || !a[0].has_value())
+    return nullptr;
+  TreeNode *root = new TreeNode(*a[0]);
+  queue<TreeNode *> q;
+  q.push(root);
+  size_t i = 1;
+  while (!q.empty() && i < a.size()) {
+    TreeNode *cur = q.front();
+    q.pop();
+    if (i < a.size()) {
+      if (a[i].has_value()) {
+        cur->left = new TreeNode(*a[i]);
+        q.push(cur->left);
+      }
+      ++i;
+    }
+    if (i < a.size()) {
+      if (a[i].has_value()) {
+        cur->right = new TreeNode(*a[i]);
+        q.push(cur->right);
+      }
+      ++i;
+    }
+  }
+  return root;
+}
+
+// ----- 可視化（2Dセンタリング：各段を横位置合わせ）-----
+int height(TreeNode *root) {
+  if (!root)
+    return 0;
+  return 1 + max(height(root->left), height(root->right));
+}
+
+void printSpaces(int n) {
+  while (n-- > 0)
+    cout << ' ';
+}
+
+void print_tree(TreeNode *root) {
+  if (!root) {
+    cout << "(empty)" << endl;
+    return;
+  }
+  int h = height(root);
+  queue<TreeNode *> q;
+  q.push(root);
+  for (int level = 1; level <= h; ++level) {
+    int sz = (int)q.size();
+    int indent = (1 << (h - level)) - 1;
+    int between = (1 << (h - level + 1)) - 1;
+
+    printSpaces(indent);
+    vector<TreeNode *> next;
+    for (int i = 0; i < sz; ++i) {
+      TreeNode *node = q.front();
+      q.pop();
+      if (node) {
+        cout << node->val;
+        next.push_back(node->left);
+        next.push_back(node->right);
+      } else {
+        cout << '.';
+        next.push_back(nullptr);
+        next.push_back(nullptr);
+      }
+      if (i + 1 < sz)
+        printSpaces(between);
+    }
+    cout << "\n";
+
+    // 次段をキューへ
+    bool allNull = true;
+    for (auto *x : next) {
+      q.push(x);
+      if (x)
+        allNull = false;
+    }
+    if (allNull)
+      break; // これ以上は全てnull
+  }
 }

@@ -1,8 +1,6 @@
 #include "common.hpp"
 
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(nullptr);
-
+  cout << "helloworld" << endl;
   return 0;
 }
