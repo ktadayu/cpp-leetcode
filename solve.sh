@@ -16,12 +16,12 @@ if [[ -f "$FPROB" ]]; then
     read yn
     if [[ "$yn" == "y" ]]; then
         cp tmpl.cpp main.cpp
-        vim main.cpp
+        nvim main.cpp
         cp main.cpp "$FPROB"
         echo "編集のみ完了（上書きなし）"
         exit 0
     else
-      vim "$FPROB"
+      nvim "$FPROB"
       echo "解き直しを保存しました。"
       exit 0
     fi
@@ -37,7 +37,7 @@ if [ ! -f "$IFILE" ]; then
 fi
 
 # 3. Vimを起動して main.cpp を開く
-vim main.cpp
+nvim main.cpp
 
 # 4. 作業後、保存（上書き）
 cp main.cpp "problems/${FNAME}"
