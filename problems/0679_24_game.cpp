@@ -1,16 +1,17 @@
 #include "common.hpp"
 
-static constexpr double eps = 1e-6;
+static constexpr double epsilon = 1e-6;
 
 vector<double> appOperators(double a, double b) {
   vector<double> res;
   res.push_back(a + b);
   res.push_back(a - b);
   res.push_back(b - a);
-  if (b != 0) {
+  res.push_back(a * b);
+  if (fabs(b) > epsilon) {
     res.push_back(a / b);
   }
-  if (a != 0) {
+  if (fabs(a) > epsilon) {
     res.push_back(b / a);
   }
 
@@ -19,7 +20,7 @@ vector<double> appOperators(double a, double b) {
 
 bool judgePoint24(vector<double> &cards) {
   if (cards.size() == 1) {
-    return fabs(cards[0] - 24.0) < eps;
+    return fabs(cards[0] - 24.0) < epsilon;
   }
 
   for (size_t i = 0; i < cards.size(); ++i) {
@@ -32,7 +33,7 @@ bool judgePoint24(vector<double> &cards) {
         }
       }
       vector<double> ops = appOperators(a, b);
-      for (double res : op) {
+      for (double res : ops) {
         nCards.push_back(res);
         if (judgePoint24(nCards)) {
           return true;
@@ -51,7 +52,7 @@ bool judgePoint24(vector<int> &cards) {
 }
 
 int main() {
-  vector<int> cards = {4, 1, 8, 7};
+  vector<int> cards = {1, 7, 4, 5};
   bool res = judgePoint24(cards);
   cout << res << endl;
 
