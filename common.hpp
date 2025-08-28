@@ -36,28 +36,47 @@ using std::nullopt;
 using std::optional;
 using opi = std::optional<int>;
 
+// pair
 template <typename T> struct is_pair : std::false_type {};
-
+// pair of pair
 template <typename U, typename V>
 struct is_pair<std::pair<U, V>> : std::true_type {};
+// array
+template <typename T> struct is_std_array : std::false_type {};
+template <typename U, std::size_t N>
+struct is_std_array<std::array<U, N>> : std::true_type {};
+// aray_print
+template <typename U, std::size_t N>
+void print_array(const std::array<U, N> &a) {
+  std::cout << "[";
+  for (std::size_t i = 0; i < N; ++i) {
+    std::cout << a[i];
+    if (i + 1 != N)
+      std::cout << ",";
+  }
+  std::cout << "]\n";
+}
 
-template <typename T> void print_vector(const vector<T> &v) {
-  cout << "{";
-  for (size_t i = 0; i < v.size(); ++i) {
-    // コンパイル時に条件判定
+template <typename T> void print_vector(const std::vector<T> &v) {
+  std::cout << "{";
+  for (std::size_t i = 0; i < v.size(); ++i) {
     if constexpr (std::is_same_v<T, int> || std::is_same_v<T, std::string>) {
-      cout << v[i];
-    } else if constexpr (is_pair<T>::value) {
-      cout << "(" << v[i].first << "," << v[i].second << ")";
+      std::cout << v[i];
     } else if constexpr (std::is_same_v<T, bool>) {
-      cout << (v[i] ? "true" : "false");
+      std::cout << (v[i] ? "true" : "false");
+    } else if constexpr (std::is_same_v<T, char>) {
+      std::cout << static_cast<int>(v[i]);
+    } else if constexpr (is_std_array<T>::value) {
+      print_array(v[i]);
+    } else if constexpr (is_pair<T>::value) {
+      std::cout << "(" << v[i].first << "," << v[i].second << ")";
     } else {
       print_vector(v[i]);
     }
     if (i + 1 != v.size())
-      cout << ",";
+      std::cout << ",";
   }
-  cout << "}" << endl;
+  std::cout << "}\n";
 }
 // 素数列挙関数
 vector<int> sieve(int n) {
