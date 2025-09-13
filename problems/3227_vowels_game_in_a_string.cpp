@@ -9,29 +9,20 @@ bool isVowel(char c) {
          c == 'e' || c == 'E' || c == 'o' || c == 'O';
 }
 
-int maxFreqSum(string s) {
-
-  unordered_map<char, int> um;
-  int mxV = 0;
-  int mxC = 0;
+bool doesAliceWin(string s) {
+  int n = s.size();
+  int vowelsCnt = 0;
   EACH(c, s) {
-    um[c]++;
     if (isVowel(c)) {
-      mxV = max(um[c], mxV);
-    } else {
-      mxC = max(um[c], mxC);
+      vowelsCnt++;
     }
   }
 
-  return mxV + mxC;
+  if (vowelsCnt == 0) {
+    return false;
+  }
+
+  return true;
 }
 
-int main() {
-
-  string s = "aeiaeia";
-  int k = maxFreqSum(s);
-
-  cout << k << endl;
-
-  return 0;
-}
+int main() { return 0; }

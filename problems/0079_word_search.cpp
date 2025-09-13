@@ -4,4 +4,11 @@
 #define RREPI(i, end, start) for (int i = (end) - 1; i >= start; --i)
 #define EACH(i, is) for (auto &&i : (is))
 
+bool exist(vector<vector<char>> &board, string word) {
+  vector<int> dx[4] = {-1, 0, 1, 0};
+  vector<int> dy[4] = {0, 1, 0, -1};
+
+  for ()
+}
+
 int main() { return 0; }
