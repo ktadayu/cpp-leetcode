@@ -4,7 +4,7 @@
 set -e
 
 NUM="0000${1:-$(date +%m%d)}"
-NUM=${NUM: -4}
+DATE=${NUM: -4}
 NAME=$2
 FNAME="${DATE}_${NAME}.cpp"
 FPROB="contest/${FNAME}"
